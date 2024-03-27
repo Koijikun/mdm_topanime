@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Project 1: Top Anime</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="script.js" async></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/img/icon.png" alt="Logo" width="70" height="70" class="d-inline-block align-text-center">
+                Top Anime
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContend">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-2">
+                <li>
+                    <a class="nav-link active" aria-current="page" href="new.html">Model</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Top anime according to myanimelist</h1>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Episodes</th>
+                        <th>Airing</th>
+                        <th>Members</th>
+                        <th>Ratings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(data['name']|length) %}
+                    <tr>
+                        <td>{{ data['name'][i] }}</td>
+                        <td>{{ data['episodes'][i] }}</td>
+                        <td>{{ data['airing'][i] }}</td>
+                        <td>{{ data['members'][i] }}</td>
+                        <td>{{ data['ratings'][i] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
