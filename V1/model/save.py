@@ -16,18 +16,18 @@ try:
     suffix = 0
     containers = blob_service_client.list_containers(include_metadata=True)
     for container in containers:
-    existing_container_name = container['name']
-    print(existing_container_name, container['metadata'])
-    if existing_container_name.startswith("anime-model"):
-        parts = existing_container_name.split("-")
-        if len(parts) == 2:
-            try:
-                new_suffix = int(parts[-1])
-            except ValueError:
-                print(f"Unable to convert '{parts[-1]}' to an integer")
-                continue  # Skip this container
-            if new_suffix > suffix:
-                suffix = new_suffix
+        existing_container_name = container['name']
+        print(existing_container_name, container['metadata'])
+        if existing_container_name.startswith("anime-model"):
+            parts = existing_container_name.split("-")
+            if len(parts) == 2:
+                try:
+                    new_suffix = int(parts[-1])
+                except ValueError:
+                    print(f"Unable to convert '{parts[-1]}' to an integer")
+                    continue  # Skip this container
+                if new_suffix > suffix:
+                    suffix = new_suffix
 
     suffix += 1
     container_name = f"anime-model-{suffix}"
