@@ -26,10 +26,10 @@ try:
                 except ValueError:
                     print(f"Unable to convert '{parts[-1]}' to an integer")
                     continue  # Skip this container
-                if new_suffix > suffix:
-                    suffix = new_suffix
+                if new_suffix >= suffix:
+                    suffix = new_suffix + 1  # Increment suffix
 
-    suffix += 1
+    # Create container with the next available suffix
     container_name = f"anime-model-{suffix}"
 
     for container in containers:
