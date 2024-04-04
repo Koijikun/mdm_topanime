@@ -19,7 +19,7 @@ try:
         existing_container_name = container['name']
         if existing_container_name.startswith("anime-model"):
             parts = existing_container_name.split("-")
-            if len(parts) == 2:
+            if len(parts) == 3:
                 try:
                     new_suffix = int(parts[-1])
                     if new_suffix >= suffix:
