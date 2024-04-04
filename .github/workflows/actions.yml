@@ -27,7 +27,7 @@ jobs:
 
       - name: upload data to mongodb
         working-directory: ./V1/scrape
-        run: python ./mongo_import.py -c tracks -i ../file.jl -u "${{secrets.MONGODB_URI}}" 
+        run: python ./mongo_import.py -u "${{secrets.MONGODB_URI}}" -c anime 
 
       - name: build model
         working-directory: ./V1/model
