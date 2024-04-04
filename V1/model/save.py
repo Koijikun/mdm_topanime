@@ -30,7 +30,7 @@ try:
                     suffix = new_suffix + 1  # Increment suffix
 
 # Create container with the next available suffix
-container_name = f"anime-model-{suffix}"
+container_name = "anime-model-{}".format(suffix)
 container_client = blob_service_client.create_container(container_name)
 
     # Create container with the next available suffix
