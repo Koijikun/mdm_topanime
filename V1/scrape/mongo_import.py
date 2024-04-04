@@ -1,7 +1,3 @@
-#in dir /scrape: python mongo_import.py -u "mongodb+srv://barbosan:Chidori1997@mdmmongodbbas.mongocluster.cosmos.azure.com/tracks" -c tracks
-#in bash /scrape: python mongo_import.py -u 'mongodb+srv://user:password@mdmmongodbbas.mongocluster.cosmos.azure.com/dbname' -c tracks
-
-
 import argparse
 import data_scrape as ds
 from pymongo import MongoClient

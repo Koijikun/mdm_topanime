@@ -1,25 +1,17 @@
 function predict() {
-    var episodes = document.getElementById("episodes").value;
-    var members = document.getElementById("members").value;
-    var timespan = document.getElementById("timespan").value;
+    var formData = new FormData(document.getElementById("predictionForm"));
 
     fetch("/predict", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ episode: episodes, member: members, timespan: timespan }),
+      method: "POST",
+      body: JSON.stringify(Object.fromEntries(formData)),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        alert("Predicted rating: " + data.prediction);
-    })
-    .catch(error => {
-        console.error('Error predicting:', error);
-    });
-}
+      .then(response => response.json())
+      .then(data => {
+        // Display prediction result
+        document.getElementById("predictionResult").innerText = "Predicted rating: " + data.predicted_rating;
+      })
+      .catch(error => console.error("Error:", error));
+  }

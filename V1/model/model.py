@@ -1,36 +1,32 @@
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from scrape import data_scrape as ds
+#from scrape import data_scrape as ds
+import get_data as get_data
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
+import os
 
-def create_model(episodes,members,timespans,ratings):
+def create_model():
     #---------------------------------------------------------
     #Selecting Data
     #---------------------------------------------------------
-    data = {
-        'Episodes': episodes,
-        'Members': members,
-        'Timespans': timespans,
-        'Ratings': ratings
-    }
 
-    df = pd.DataFrame(data)
+    df = get_data.get_mongo_data()
 
     #---------------------------------------------------------
     #Cleaning Data
     #---------------------------------------------------------
 
     # Replace '?' with NaN in the 'episodes' column
-    df['Episodes'] = df['Episodes'].replace('?', pd.NA)
+    df['episodes'] = df['episodes'].replace('?', pd.NA)
 
     # Convert the 'episodes' column to numeric
-    df['Episodes'] = pd.to_numeric(df['Episodes'], errors='coerce')
+    df['episodes'] = pd.to_numeric(df['episodes'], errors='coerce')
 
     # Drop rows where episodes are NaN or timespan is 0
-    df = df.dropna(subset=['Episodes', 'Timespans'])
-    df = df[df['Timespans'] != 0]
+    df = df.dropna(subset=['episodes', 'timespans'])
+    df = df[df['timespans'] != 0]
 
     # Reset index
     df.reset_index(drop=True, inplace=True)
@@ -43,8 +39,8 @@ def create_model(episodes,members,timespans,ratings):
     df_shuffled = df.sample(frac=1, random_state=42)
 
     # Separate features (X) and target (y)
-    X = df_shuffled[['Episodes', 'Members', 'Timespans']]
-    y = df_shuffled['Ratings']
+    X = df_shuffled[['episodes', 'members', 'timespans']]
+    y = df_shuffled['ratings']
 
     # Initialize the linear regression model
     model = LinearRegression()
@@ -72,8 +68,8 @@ def create_model(episodes,members,timespans,ratings):
     # Separate features (X) and target (y) from the filtered dataframe
     global X_filtered
     global y_filtered
-    X_filtered = filtered_df[['Episodes', 'Members', 'Timespans']]
-    y_filtered = filtered_df['Ratings']
+    X_filtered = filtered_df[['episodes', 'members', 'timespans']]
+    y_filtered = filtered_df['ratings']
 
     # Fit the model with filtered data
     model.fit(X_filtered, y_filtered)
@@ -92,7 +88,7 @@ def create_model(episodes,members,timespans,ratings):
 #Plot
 #---------------------------------------------------------
 
-def plot_model(x,y):
+def plot_model(x, y):
     # Predict ratings using the model
     predicted_ratings = model.predict(x)
 
@@ -104,7 +100,16 @@ def plot_model(x,y):
     plt.title('Actual vs. Predicted Ratings')
     plt.legend()
     plt.grid(True)
-    plt.show()
+
+    # Add diagonal line
+    min_value = min(min(y), min(predicted_ratings))
+    max_value = max(max(y), max(predicted_ratings))
+    plt.plot([min_value, max_value], [min_value, max_value], color='red', linestyle='--', label='Diagonal Line')
+
+    # Save the plot as PNG if it doesn't exist already
+    if not os.path.exists('../web/img/plot.png'):
+        plt.savefig('../web/img/plot.png')
+
 
 #---------------------------------------------------------
 #Predict
@@ -121,13 +126,12 @@ def model_predict(model,new_episode,new_member,new_timespan):
 #---------------------------------------------------------
 #Save model
 #---------------------------------------------------------
-model = create_model(ds.episodes, ds.members, ds.timespans, ds.ratings)
+model = create_model()
 
-model_filepath = 'model/anime_model.pkl'
+model_filepath = '../model/anime_model.pkl'
 
 # Save the model to disk
 with open(model_filepath, 'wb') as f:
     pickle.dump(model, f)
 
-#model = create_model(ds.episodes, ds.members, ds.timespans, ds.ratings)
-plot_model(X_filtered,y_filtered)
+#plot_model(X_filtered,y_filtered)
