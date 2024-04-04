@@ -31,7 +31,7 @@ jobs:
 
       - name: build model
         working-directory: model
-        run: python ./model.py -u "${{secrets.MONGODB_URI}}"
+        run: python ./model.py -u "${{secrets.MONGODB_URI_GET}}"
 
       - name: upload model
         working-directory: model
