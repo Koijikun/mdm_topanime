@@ -1,8 +1,3 @@
-import os
-from azure.identity import DefaultAzureCredential
-from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
-import argparse
-
 try:
     print("Azure Blob Storage Python quickstart sample")
 
@@ -12,7 +7,6 @@ try:
 
     blob_service_client = BlobServiceClient.from_connection_string(args.connection)
 
-    exists = False
     suffix = 0
     containers = blob_service_client.list_containers(include_metadata=True)
     # Increment suffix based on existing containers
@@ -30,18 +24,14 @@ try:
     # Create container with the next available suffix
     container_name = f"anime-model-{suffix}"
 
-    container_client = blob_service_client.create_container(container_name)
+    # Check if the container already exists
+    container_exists = any(container_name == container['name'] for container in containers)
 
-
-    for container in containers:
-        print("\t" + container['name'])
-        if container_name == container['name']:
-            print("Container already exists!")
-            exists = True
-            break
-
-    if not exists:
+    # If the container doesn't exist, create it
+    if not container_exists:
         container_client = blob_service_client.create_container(container_name)
+    else:
+        print("Container already exists!")
 
     local_file_name = "anime_model.pkl"
     upload_file_path = os.path.join(".", local_file_name)
@@ -56,4 +46,3 @@ except Exception as ex:
     print('Exception:')
     print(ex)
     exit(1)
-
