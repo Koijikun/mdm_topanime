@@ -1,3 +1,8 @@
+import os
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+import argparse
+
 try:
     print("Azure Blob Storage Python quickstart sample")
 
