@@ -14,7 +14,6 @@ try:
 
     suffix = 0
     containers = blob_service_client.list_containers(include_metadata=True)
-    # Increment suffix based on existing containers
     for container in containers:
         existing_container_name = container['name']
         if existing_container_name.startswith("anime-model"):
@@ -22,17 +21,14 @@ try:
             if len(parts) == 3:
                 try:
                     new_suffix = int(parts[-1])
-                    suffix = max(suffix, new_suffix + 1)  # Update suffix to the maximum found
+                    suffix = max(suffix, new_suffix + 1) 
                 except ValueError:
                     print(f"Unable to convert '{parts[-1]}' to an integer")
 
-    # Create container with the next available suffix
     container_name = f"anime-model-{suffix}"
 
-    # Check if the container already exists
     container_exists = any(container_name == container['name'] for container in containers)
 
-    # If the container doesn't exist, create it
     if not container_exists:
         container_client = blob_service_client.create_container(container_name)
     else:
