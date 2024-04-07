@@ -30,7 +30,6 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--collection', required=True, help="name of the mongodb collection where the tracks should be stored")
     args = parser.parse_args()
 
-    # Create data list
     data = []
     for i in range(len(ds.name)):
         document = {
@@ -43,6 +42,5 @@ if __name__ == '__main__':
         }
         data.append(document)
 
-    # Initialize importer and save to MongoDB
     importer = JsonLinesImporter(data, collection=args.collection, mongo_uri=args.uri)
     importer.save_to_mongodb()
